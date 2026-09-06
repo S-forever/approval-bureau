@@ -2,23 +2,23 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>朋友购物审批局</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
     body {
       background-color: #e8e8e8;
-      font-family: 'Courier New', 'SimHei', monospace;
+      font-family: 'VT323', 'Courier New', 'SimHei', monospace;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem;
       -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
     }
 
     /* 移动端适配 */
@@ -36,11 +36,11 @@
         padding: 0.6rem;
       }
 
-      .app-header h1 {
+      #app > .text-center.mb-6 > h1 {
         font-size: 1.8rem !important;
       }
 
-      .app-header p {
+      #app > .text-center.mb-6 > p {
         font-size: 0.9rem !important;
       }
 
@@ -53,7 +53,7 @@
         padding: 0.8rem;
       }
 
-      .parse-section .flex-row {
+      .parse-section .flex {
         flex-direction: column;
       }
 
@@ -140,71 +140,9 @@
         padding: 0.4rem;
       }
 
-      .app-header h1 {
+      #app > .text-center.mb-6 > h1 {
         font-size: 1.5rem !important;
       }
-    }
-
-    /* 弹窗内小票字号缩小，防止换行 */
-    #receipt-detail .receipt-border {
-      font-size: 0.85rem;
-    }
-    #receipt-detail .text-2xl {
-      font-size: 1.2rem !important;
-    }
-    #receipt-detail .text-xl {
-      font-size: 1rem !important;
-    }
-    #receipt-detail .text-lg {
-      font-size: 0.9rem !important;
-    }
-    #receipt-detail .text-sm {
-      font-size: 0.75rem !important;
-    }
-    #receipt-detail .final-status {
-      font-size: 1.2rem !important;
-      padding: 0.6rem;
-    }
-    #receipt-detail .stamp {
-      font-size: 1.5rem;
-    }
-    #receipt-detail .btn-approve,
-    #receipt-detail .btn-reject {
-      font-size: 0.9rem !important;
-      padding: 0.5rem 0.4rem !important;
-    }
-    #receipt-detail .comment-textarea {
-      font-size: 0.8rem;
-      min-height: 36px;
-    }
-    #receipt-detail .fill-comment-btn {
-      font-size: 0.7rem;
-      padding: 0.1rem 0.3rem;
-    }
-    #receipt-detail .status-badge {
-      font-size: 0.75rem;
-      padding: 0.15rem 0.4rem;
-    }
-    #receipt-detail .court-reason {
-      font-size: 0.85rem;
-      padding: 0.5rem;
-    }
-
-    .app-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .app-header h1 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      letter-spacing: 0.1rem;
-    }
-
-    .app-header p {
-      color: #666;
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
     }
 
     .receipt {
@@ -490,10 +428,7 @@
 
     .court-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.7);
       z-index: 200;
       display: flex;
@@ -762,97 +697,20 @@
     .page-impact {
       animation: page-impact 0.3s ease-out;
     }
-
-    /* 布局辅助类 */
-    .flex { display: flex; }
-    .flex-col { flex-direction: column; }
-    .flex-row { flex-direction: row; }
-    .flex-1 { flex: 1; }
-    .items-center { align-items: center; }
-    .items-start { align-items: flex-start; }
-    .justify-center { justify-content: center; }
-    .justify-between { justify-content: space-between; }
-    .gap-1 { gap: 0.25rem; }
-    .gap-2 { gap: 0.5rem; }
-    .gap-4 { gap: 1rem; }
-    .space-y-2 > * + * { margin-top: 0.5rem; }
-    .space-y-4 > * + * { margin-top: 1rem; }
-    .text-center { text-align: center; }
-    .text-left { text-align: left; }
-    .text-right { text-align: right; }
-    .text-sm { font-size: 0.875rem; }
-    .text-lg { font-size: 1.125rem; }
-    .text-xl { font-size: 1.25rem; }
-    .text-2xl { font-size: 1.5rem; }
-    .text-4xl { font-size: 2.25rem; }
-    .font-bold { font-weight: bold; }
-    .text-gray-300 { color: #d1d5db; }
-    .text-gray-400 { color: #9ca3af; }
-    .text-gray-500 { color: #6b7280; }
-    .text-gray-600 { color: #4b5563; }
-    .text-blue-600 { color: #2563eb; }
-    .bg-black { background-color: #000; }
-    .bg-opacity-50 { background-color: rgba(0, 0, 0, 0.5); }
-    .bg-yellow-50 { background-color: #fefce8; }
-    .border-gray-300 { border-color: #d1d5db; }
-    .border-yellow-300 { border-color: #fde047; }
-    .border-t-2 { border-top: 2px solid; }
-    .border-b-2 { border-bottom: 2px solid; }
-    .border-dashed { border-style: dashed; }
-    .rounded { border-radius: 0.25rem; }
-    .hidden { display: none; }
-    .fixed { position: fixed; }
-    .absolute { position: absolute; }
-    .relative { position: relative; }
-    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-    .top-4 { top: 1rem; }
-    .right-4 { right: 1rem; }
-    .z-50 { z-index: 50; }
-    .z-60 { z-index: 60; }
-    .p-2 { padding: 0.5rem; }
-    .p-3 { padding: 0.75rem; }
-    .p-4 { padding: 1rem; }
-    .px-4 { padding-left: 1rem; padding-right: 1rem; }
-    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-    .mb-1 { margin-bottom: 0.25rem; }
-    .mb-2 { margin-bottom: 0.5rem; }
-    .mb-3 { margin-bottom: 0.75rem; }
-    .mb-4 { margin-bottom: 1rem; }
-    .mb-6 { margin-bottom: 1.5rem; }
-    .mt-1 { margin-top: 0.25rem; }
-    .mt-2 { margin-top: 0.5rem; }
-    .mt-4 { margin-top: 1rem; }
-    .mt-6 { margin-top: 1.5rem; }
-    .my-4 { margin-top: 1rem; margin-bottom: 1rem; }
-    .mx-auto { margin-left: auto; margin-right: auto; }
-    .pt-4 { padding-top: 1rem; }
-    .pb-2 { padding-bottom: 0.5rem; }
-    .overflow-x-auto { overflow-x: auto; }
-    .overflow-y-auto { overflow-y: auto; }
-    .overflow-visible { overflow: visible; }
-    .max-w-lg { max-width: 32rem; }
-    .w-full { width: 100%; }
-    .underline { text-decoration: underline; }
-    .italic { font-style: italic; }
-    .cursor-pointer { cursor: pointer; }
-    .pointer-events-none { pointer-events: none; }
-    .border { border: 1px solid; }
-    .block { display: block; }
-    .inline-block { display: inline-block; }
   </style>
 </head>
 <body>
   <div id="app" class="w-full max-w-lg">
     <!-- Header -->
-    <div class="app-header mb-6">
-      <h1>🧾 朋友购物审批局</h1>
-      <p>— 每一笔消费，都值得被审批 —</p>
+    <div class="text-center mb-6">
+      <h1 class="text-4xl font-bold tracking-wider" style="font-family: 'VT323', monospace;">🧾 朋友购物审批局</h1>
+      <p class="text-gray-500 mt-2" style="font-size: 1.1rem;">— 每一笔消费，都值得被审批 —</p>
     </div>
 
     <!-- Tabs -->
     <div class="flex justify-center gap-4 mb-6 border-b-2 border-gray-300 pb-2">
-      <button class="tab-btn active" id="tab-form-btn">📝 提交申请</button>
-      <button class="tab-btn" id="tab-history-btn">📋 审批记录</button>
+      <button class="tab-btn active" onclick="switchTab('form')">📝 提交申请</button>
+      <button class="tab-btn" onclick="switchTab('history')">📋 审批记录</button>
     </div>
 
     <!-- Form Tab -->
@@ -863,13 +721,13 @@
           <p class="text-sm text-gray-500">No. <span id="receipt-no">000001</span></p>
         </div>
 
-        <form id="approval-form">
+        <form id="approval-form" onsubmit="submitForm(event)">
           <!-- URL Parse Section -->
           <div class="parse-section">
             <label class="block mb-2 text-lg font-bold">🔗 粘贴商品链接</label>
-            <div class="flex gap-2 flex-row">
+            <div class="flex gap-2">
               <input type="text" id="product-url" class="form-input flex-1" placeholder="例：https://example.com?title=奶茶&price=25&img=..." />
-              <button type="button" class="parse-btn" id="parse-btn">📡 一键解析</button>
+              <button type="button" class="parse-btn" onclick="parseProductUrl()">📡 一键解析</button>
             </div>
             <div class="image-preview" id="image-preview">
               <div class="placeholder">
@@ -893,7 +751,7 @@
           <div class="mb-4">
             <label class="block mb-1 text-lg">📝 购买理由</label>
             <div class="flex gap-2 mb-2">
-              <button type="button" class="gen-reason-btn" id="gen-reason-btn">🎭 生成戏精理由</button>
+              <button type="button" class="gen-reason-btn" onclick="generateReason()">🎭 生成戏精理由</button>
             </div>
             <textarea id="reason" class="form-input" rows="3" placeholder="例：今天心情不好，需要糖分安慰" required></textarea>
           </div>
@@ -914,15 +772,1497 @@
 
     <!-- Receipt Detail Modal -->
     <div id="receipt-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div id="receipt-detail" class="receipt mx-auto relative" style="max-height: 85vh; overflow-y: auto;">
+      <div id="receipt-detail" class="receipt mx-auto relative overflow-visible" style="max-height: 90vh; overflow-y: auto;">
         <!-- Dynamic content -->
       </div>
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-3xl font-bold hover:text-gray-300" style="z-index: 60;">&times;</button>
     </div>
   </div>
 
-  <!-- Close button outside #app to avoid any container clipping -->
-  <button id="close-modal-btn" style="display: none; position: fixed; top: 86px; right: 56px; z-index: 99999; background: #fff; border-radius: 50%; width: 18px; height: 18px; line-height: 18px; text-align: center; border: 1px solid #333; font-size: 11px; font-weight: bold; color: #333; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.3);">&times;</button>
+  <script>
+    // ===== Supabase 配置管理 =====
+    let sbClient = null;
 
-  <script src="./app.js"></script>
+    function getSupabaseConfig() {
+      // 优先使用 config.js 中的配置（如果不是默认占位符）
+      if (typeof SUPABASE_CONFIG !== 'undefined' && 
+          SUPABASE_CONFIG.SUPABASE_URL && 
+          SUPABASE_CONFIG.SUPABASE_URL !== 'https://your-project-id.supabase.co' &&
+          SUPABASE_CONFIG.SUPABASE_ANON_KEY && 
+          SUPABASE_CONFIG.SUPABASE_ANON_KEY !== 'your-anon-key-here') {
+        return { url: SUPABASE_CONFIG.SUPABASE_URL, key: SUPABASE_CONFIG.SUPABASE_ANON_KEY };
+      }
+      
+      // 其次使用 localStorage 中的配置
+      const saved = localStorage.getItem('supabase_config');
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) { return null; }
+      }
+      return null;
+    }
+
+    function saveSupabaseConfig(url, key) {
+      localStorage.setItem('supabase_config', JSON.stringify({ url, key }));
+    }
+
+    function initSupabase(url, key) {
+      try {
+        if (!window.supabase || !window.supabase.createClient) {
+          console.warn('Supabase SDK 未加载，云端功能不可用');
+          return false;
+        }
+        sbClient = window.supabase.createClient(url, key);
+        return true;
+      } catch(e) {
+        console.error('Supabase 初始化失败:', e);
+        return false;
+      }
+    }
+
+    function showConfigPanel() {
+      const config = getSupabaseConfig();
+      document.getElementById('app').innerHTML = `
+        <div class="text-center mb-6">
+          <h1 class="text-4xl font-bold tracking-wider" style="font-family: 'VT323', monospace;">🧾 朋友购物审批局</h1>
+          <p class="text-gray-500 mt-2" style="font-size: 1.1rem;">— 每一笔消费，都值得被审批 —</p>
+        </div>
+        <div class="receipt mx-auto">
+          <div class="receipt-border">
+            <div class="text-center mb-4">
+              <p class="text-2xl font-bold">⚙️ 云端配置</p>
+              <p class="text-sm text-gray-500 mt-2">首次使用需配置 Supabase 云端数据库</p>
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1 text-lg">🔗 Supabase URL</label>
+              <input type="text" id="config-url" class="form-input" placeholder="https://xxx.supabase.co" value="${config?.url || ''}" />
+            </div>
+            <div class="mb-4">
+              <label class="block mb-1 text-lg">🔑 Supabase Anon Key</label>
+              <input type="text" id="config-key" class="form-input" placeholder="eyJhbGciOi..." value="${config?.key || ''}" />
+            </div>
+            <div class="mb-4 p-3 bg-yellow-50 border border-yellow-300 rounded text-sm">
+              <p class="font-bold mb-1">📖 配置教程：</p>
+              <p>1. 访问 <a href="https://supabase.com" target="_blank" class="text-blue-600 underline">supabase.com</a> 注册免费账号</p>
+              <p>2. 创建项目，获取 Project URL 和 anon/public key</p>
+              <p>3. 在 SQL Editor 中执行以下建表语句：</p>
+              <pre class="bg-gray-100 p-2 mt-1 rounded text-xs overflow-x-auto">create table approval_records (
+  id uuid default gen_random_uuid() primary key,
+  no text,
+  name text,
+  amount float,
+  reason text,
+  required_approvals int,
+  approvals jsonb default '{}',
+  cloud_id text,
+  created_at timestamptz default now()
+);
+alter table approval_records enable row level security;
+create policy "Allow all" on approval_records for all using (true) with check (true);</pre>
+            </div>
+            <div class="text-center">
+              <button class="submit-btn" onclick="saveConfig()">💾 保存配置</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function saveConfig() {
+      const url = document.getElementById('config-url').value.trim();
+      const key = document.getElementById('config-key').value.trim();
+      if (!url || !key) {
+        alert('请填写完整的 URL 和 Key');
+        return;
+      }
+      if (!url.startsWith('https://')) {
+        alert('URL 必须以 https:// 开头');
+        return;
+      }
+      saveSupabaseConfig(url, key);
+      if (initSupabase(url, key)) {
+        alert('配置保存成功！');
+        location.reload();
+      } else {
+        alert('配置保存失败，请检查信息是否正确');
+      }
+    }
+
+    // 启动时检查配置
+    (async function bootstrap() {
+      try {
+        const config = getSupabaseConfig();
+        if (config && config.url && config.key) {
+          const success = initSupabase(config.url, config.key);
+          if (success) {
+            // 测试连接
+            try {
+              const { data, error } = await sbClient.from('approval_records').select('id').limit(1);
+              if (error) {
+                console.error('数据库连接测试失败:', error);
+                if (error.code === '42P01') {
+                  alert('⚠️ 数据库表不存在！\n\n请先在 Supabase SQL Editor 中执行建表语句。\n查看配置面板中的教程。');
+                  showConfigPanel();
+                  return;
+                }
+              } else {
+                console.log('✅ Supabase 连接成功，表已存在');
+              }
+            } catch (err) {
+              console.error('连接测试异常:', err);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('启动检查失败，应用仍可正常使用本地功能:', e);
+      }
+    })();
+
+    // 检查是否是分享链接
+    function checkShareLink() {
+      if (!sbClient) {
+        showConfigPanel();
+        return;
+      }
+      const urlParams = new URLSearchParams(window.location.search);
+      const recordId = urlParams.get('id');
+      if (recordId) {
+        loadSharedRecord(recordId);
+      }
+    }
+
+    // 加载分享的记录
+    async function loadSharedRecord(id) {
+      try {
+        const { data, error } = await sbClient
+          .from('approval_records')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) {
+          console.error('加载失败:', error);
+          alert('找不到这条审批记录');
+          return;
+        }
+
+        // 显示审批页面
+        showApprovalPage(data);
+      } catch (err) {
+        console.error('加载错误:', err);
+        alert('加载失败，请稍后重试');
+      }
+    }
+
+    // 显示审批页面（朋友视角）
+    function showApprovalPage(record) {
+      document.getElementById('app').innerHTML = `
+        <div class="text-center mb-6">
+          <h1 class="text-4xl font-bold tracking-wider" style="font-family: 'VT323', monospace;">🧾 朋友购物审批局</h1>
+          <p class="text-gray-500 mt-2" style="font-size: 1.1rem;">— 朋友发来一条审批申请 —</p>
+        </div>
+        <div class="receipt mx-auto">
+          <div class="receipt-border">
+            <div class="text-center mb-4">
+              <p class="text-2xl font-bold">═══ 审批申请 ═══</p>
+              <p class="text-sm text-gray-500">No. ${record.no}</p>
+              <p class="text-sm text-gray-500">${record.created_at}</p>
+            </div>
+
+            <div class="mb-4 space-y-2">
+              <p class="text-lg"><span class="font-bold">📦 商品：</span>${escapeHtml(record.name)}</p>
+              <p class="text-lg"><span class="font-bold">💰 金额：</span>¥${record.amount.toFixed(2)}</p>
+              <p class="text-lg"><span class="font-bold">📝 理由：</span>${escapeHtml(record.reason)}</p>
+              <p class="text-lg"><span class="font-bold">👥 需要审批：</span>${record.required_approvals} 位朋友</p>
+            </div>
+
+            <div class="border-t-2 border-dashed border-gray-300 my-4 pt-4">
+              <p class="text-center text-lg font-bold mb-3">─── 审批区 ───</p>
+              <div class="mb-4">
+                <label class="block mb-2 text-lg font-bold">你的身份</label>
+                <select id="friend-select" class="form-input">
+                  <option value="A">朋友A</option>
+                  ${record.required_approvals === 2 ? '<option value="B">朋友B</option>' : ''}
+                </select>
+              </div>
+              <div class="mb-4">
+                <label class="block mb-2 text-lg font-bold">审批意见</label>
+                <textarea id="approval-comment" class="form-input" rows="3" placeholder="写点什么吧..."></textarea>
+              </div>
+              <div class="flex gap-2">
+                <button class="btn-approve flex-1 py-2 text-lg" onclick="submitSharedApproval('${record.id}', 'approved')">✅ 批准</button>
+                <button class="btn-reject flex-1 py-2 text-lg" onclick="submitSharedApproval('${record.id}', 'rejected')">❌ 驳回</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 提交分享的审批意见
+    async function submitSharedApproval(id, action) {
+      const friend = document.getElementById('friend-select').value;
+      const comment = document.getElementById('approval-comment').value.trim();
+
+      try {
+        // 先获取当前记录
+        const { data: record, error: fetchError } = await sbClient
+          .from('approval_records')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (fetchError) throw fetchError;
+
+        // 更新审批状态
+        const approvals = record.approvals || {};
+        approvals[friend] = { status: action, comment: comment };
+
+        const { error: updateError } = await sbClient
+          .from('approval_records')
+          .update({ approvals: approvals })
+          .eq('id', id);
+
+        if (updateError) throw updateError;
+
+        // 播放音效
+        if (action === 'approved') {
+          playStampSound();
+        } else {
+          playRejectSound();
+          playTearSound();
+        }
+
+        alert('审批意见已提交！感谢你的参与 🎉');
+        
+        // 显示结果
+        showApprovalResult(record, approvals);
+      } catch (err) {
+        console.error('提交失败:', err);
+        alert('提交失败，请稍后重试');
+      }
+    }
+
+    // 显示审批结果
+    function showApprovalResult(record, approvals) {
+      const aStatus = approvals.A?.status || 'pending';
+      const bStatus = approvals.B?.status || 'pending';
+      let finalStatus = 'pending';
+      
+      if (aStatus === 'approved' && (bStatus === 'approved' || bStatus === 'ignored')) {
+        finalStatus = 'approved';
+      } else if (aStatus === 'rejected' || bStatus === 'rejected') {
+        finalStatus = 'rejected';
+      }
+
+      document.getElementById('app').innerHTML = `
+        <div class="text-center mb-6">
+          <h1 class="text-4xl font-bold tracking-wider" style="font-family: 'VT323', monospace;">🧾 朋友购物审批局</h1>
+          <p class="text-gray-500 mt-2" style="font-size: 1.1rem;">— 审批结果 —</p>
+        </div>
+        <div class="receipt mx-auto">
+          <div class="receipt-border">
+            <div class="text-center mb-4">
+              <p class="text-2xl font-bold">═══ 审批结果 ═══</p>
+              <p class="text-sm text-gray-500">No. ${record.no}</p>
+            </div>
+
+            <div class="mb-4 space-y-2">
+              <p class="text-lg"><span class="font-bold">📦 商品：</span>${escapeHtml(record.name)}</p>
+              <p class="text-lg"><span class="font-bold">💰 金额：</span>¥${record.amount.toFixed(2)}</p>
+            </div>
+
+            <div class="border-t-2 border-dashed border-gray-300 my-4 pt-4">
+              <p class="text-center text-lg mb-2">朋友A：${aStatus === 'approved' ? '✅ 已批准' : aStatus === 'rejected' ? '❌ 已驳回' : '⏳ 待审批'}</p>
+              ${record.required_approvals === 2 ? `<p class="text-center text-lg mb-2">朋友B：${bStatus === 'approved' ? '✅ 已批准' : bStatus === 'rejected' ? '❌ 已驳回' : '⏳ 待审批'}</p>` : ''}
+            </div>
+
+            <div class="final-status ${finalStatus === 'approved' ? 'pass' : 'wait'}">
+              ${finalStatus === 'approved' ? '✅ 审批通过，去买吧！' : finalStatus === 'rejected' ? '❌ 审批被驳回，省钱了！' : '⏳ 等待审批中'}
+            </div>
+
+            <div class="text-center mt-4">
+              <button class="submit-btn" onclick="location.href=location.pathname">返回首页</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      if (finalStatus === 'approved') {
+        playSuccessSound();
+        spawnConfetti();
+        spawnCanvasCoins(record.amount);
+      }
+    }
+
+    // 上传记录到云端
+    async function uploadRecord(record) {
+      try {
+        const { data, error } = await sbClient
+          .from('approval_records')
+          .insert([record])
+          .select()
+          .single();
+
+        if (error) {
+          console.error('上传失败:', error);
+          return null;
+        }
+
+        return data.id;
+      } catch (err) {
+        console.error('上传错误:', err);
+        return null;
+      }
+    }
+
+    // 从云端同步记录
+    async function syncRecord(id) {
+      try {
+        const { data, error } = await sbClient
+          .from('approval_records')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) {
+          console.error('同步失败:', error);
+          return null;
+        }
+
+        return data;
+      } catch (err) {
+        console.error('同步错误:', err);
+        return null;
+      }
+    }
+
+    // 更新云端记录
+    async function updateCloudRecord(id, updates) {
+      try {
+        const { error } = await sbClient
+          .from('approval_records')
+          .update(updates)
+          .eq('id', id);
+
+        if (error) {
+          console.error('更新失败:', error);
+          return false;
+        }
+
+        return true;
+      } catch (err) {
+        console.error('更新错误:', err);
+        return false;
+      }
+    }
+
+    // ===== Audio Context for Sound Effects =====
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      return audioCtx;
+    }
+
+    function playStampSound() {
+      const ctx = getAudioCtx();
+      // 夸张的"砰"声 - 从高到低的滑音
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.type = 'sawtooth';
+      osc1.frequency.setValueAtTime(800, ctx.currentTime);
+      osc1.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+      gain1.gain.setValueAtTime(0.6, ctx.currentTime);
+      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.15);
+
+      // 加一个"boing"回弹音
+      setTimeout(() => {
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(200, ctx.currentTime);
+        osc2.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.05);
+        osc2.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+        gain2.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.15);
+      }, 80);
+    }
+
+    function playRejectSound() {
+      const ctx = getAudioCtx();
+      // 卡通"哇哇"失败音 -  descending slide
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2);
+      osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.4);
+      gain.gain.setValueAtTime(0.4, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+
+      // 加一个"wah wah"颤音
+      setTimeout(() => {
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(300, ctx.currentTime);
+        osc2.frequency.setValueAtTime(280, ctx.currentTime + 0.1);
+        osc2.frequency.setValueAtTime(260, ctx.currentTime + 0.2);
+        gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.3);
+      }, 150);
+    }
+
+    function playSuccessSound() {
+      const ctx = getAudioCtx();
+      // 卡通胜利号角 - 夸张的上行滑音 + 和弦
+      const notes = [523, 659, 784, 1047, 1318]; // C5, E5, G5, C6, E6
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.1 + 0.3);
+        osc.start(ctx.currentTime + i * 0.1);
+        osc.stop(ctx.currentTime + i * 0.1 + 0.3);
+      });
+
+      // 加一个"叮叮叮"的钟声
+      setTimeout(() => {
+        [2093, 2637, 3136].forEach((freq, i) => { // C7, E7, G7
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.5);
+          osc.start(ctx.currentTime + i * 0.08);
+          osc.stop(ctx.currentTime + i * 0.08 + 0.5);
+        });
+      }, 400);
+    }
+
+    // ===== Confetti Effect =====
+    function spawnConfetti() {
+      const colors = ['#16a34a', '#facc15', '#3b82f6', '#ef4444', '#a855f7', '#ec4899'];
+      for (let i = 0; i < 50; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        el.style.width = (Math.random() * 10 + 5) + 'px';
+        el.style.height = (Math.random() * 10 + 5) + 'px';
+        el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        el.style.animationDelay = (Math.random() * 0.5) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+      }
+    }
+
+    // ===== Canvas 金币/撒花效果 =====
+    function spawnCanvasCoins(amount) {
+      const canvas = document.createElement('canvas');
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.style.pointerEvents = 'none';
+      canvas.style.zIndex = '1000';
+      document.body.appendChild(canvas);
+
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const coins = [];
+      const coinCount = Math.min(Math.floor(amount / 10), 30); // 金额越大金币越多，最多30个
+
+      for (let i = 0; i < coinCount; i++) {
+        coins.push({
+          x: Math.random() * canvas.width,
+          y: -50,
+          vx: (Math.random() - 0.5) * 3,
+          vy: Math.random() * 3 + 2,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.2,
+          size: Math.random() * 15 + 10
+        });
+      }
+
+      let frame = 0;
+      const maxFrames = 180; // 3秒
+
+      function animate() {
+        if (frame >= maxFrames) {
+          document.body.removeChild(canvas);
+          return;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        coins.forEach(coin => {
+          coin.x += coin.vx;
+          coin.y += coin.vy;
+          coin.vy += 0.1; // 重力
+          coin.rotation += coin.rotationSpeed;
+
+          ctx.save();
+          ctx.translate(coin.x, coin.y);
+          ctx.rotate(coin.rotation);
+
+          // 绘制金币
+          ctx.fillStyle = '#fbbf24';
+          ctx.beginPath();
+          ctx.arc(0, 0, coin.size, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.arc(0, 0, coin.size * 0.7, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#fbbf24';
+          ctx.font = `bold ${coin.size}px Arial`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('¥', 0, 0);
+
+          ctx.restore();
+        });
+
+        frame++;
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    // ===== Data Management =====
+    function getRecords() {
+      return JSON.parse(localStorage.getItem('approval_records') || '[]');
+    }
+
+    function saveRecords(records) {
+      localStorage.setItem('approval_records', JSON.stringify(records));
+    }
+
+    function getNextNo() {
+      const records = getRecords();
+      return String(records.length + 1).padStart(6, '0');
+    }
+
+    // ===== URL Parse & Image Preview =====
+    let parsedImageData = null;
+
+    function playScanSound() {
+      const ctx = getAudioCtx();
+      // 卡通扫码枪 - 夸张的"哔哔"声，带频率跳跃
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.type = 'square';
+      osc1.frequency.setValueAtTime(1800, ctx.currentTime);
+      osc1.frequency.setValueAtTime(2200, ctx.currentTime + 0.05);
+      gain1.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.12);
+
+      // 第二声更高亢
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.type = 'square';
+      osc2.frequency.setValueAtTime(2400, ctx.currentTime + 0.15);
+      osc2.frequency.setValueAtTime(2800, ctx.currentTime + 0.2);
+      gain2.gain.setValueAtTime(0.25, ctx.currentTime + 0.15);
+      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.27);
+      osc2.start(ctx.currentTime + 0.15);
+      osc2.stop(ctx.currentTime + 0.27);
+    }
+
+    // 收银机"叮"声
+    function playCashRegisterSound() {
+      const ctx = getAudioCtx();
+      // 卡通收银机 - 夸张的"cha-ching"声
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(1500, ctx.currentTime);
+      osc1.frequency.setValueAtTime(2000, ctx.currentTime + 0.05);
+      gain1.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.15);
+
+      // 加一个"叮"的高音
+      setTimeout(() => {
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(3000, ctx.currentTime);
+        gain2.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.3);
+      }, 100);
+    }
+
+    // 撕纸声
+    function playTearSound() {
+      const ctx = getAudioCtx();
+      // 卡通撕纸声 - 快速下降的噪音
+      const bufferSize = ctx.sampleRate * 0.4;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+      }
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(3000, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.3);
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      source.start(ctx.currentTime);
+    }
+
+    // 打印机齿轮声
+    function playPrinterSound() {
+      const ctx = getAudioCtx();
+      // 卡通打印机声 - 夸张的"滋滋滋"齿轮转动
+      for (let i = 0; i < 8; i++) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100 + Math.random() * 80, ctx.currentTime + i * 0.1);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.1 + 0.08);
+        osc.start(ctx.currentTime + i * 0.1);
+        osc.stop(ctx.currentTime + i * 0.1 + 0.08);
+      }
+
+      // 加一个"叮"的完成音
+      setTimeout(() => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1500, ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.3);
+      }, 800);
+    }
+
+    function parseProductUrl() {
+      const urlInput = document.getElementById('product-url');
+      const url = urlInput.value.trim();
+      const parseSection = document.querySelector('.parse-section');
+
+      if (!url) {
+        alert('请先粘贴商品链接');
+        return;
+      }
+
+      // Add red laser scan animation
+      const laser = document.createElement('div');
+      laser.className = 'scan-laser';
+      parseSection.style.position = 'relative';
+      parseSection.appendChild(laser);
+
+      try {
+        // Try to parse URL
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+
+        // Extract parameters
+        const title = params.get('title') || params.get('name') || params.get('product');
+        const price = params.get('price') || params.get('amount') || params.get('cost');
+        const img = params.get('img') || params.get('image') || params.get('pic');
+
+        let parsed = false;
+
+        // Fill product name
+        if (title) {
+          document.getElementById('product-name').value = title;
+          parsed = true;
+        }
+
+        // Fill price
+        if (price) {
+          document.getElementById('amount').value = parseFloat(price);
+          parsed = true;
+        }
+
+        // Show image preview
+        if (img) {
+          showImagePreview(img);
+          parsed = true;
+        }
+
+        // Play scan sound and show scan line animation
+        if (parsed) {
+          playScanSound();
+          showScanAnimation();
+          
+          // Add scanning shake effect after laser finishes
+          setTimeout(() => {
+            parseSection.classList.add('scanning');
+            setTimeout(() => parseSection.classList.remove('scanning'), 300);
+          }, 800);
+        } else {
+          setTimeout(() => laser.remove(), 800);
+          alert('未能从链接中解析到商品信息，请手动填写');
+        }
+      } catch (e) {
+        setTimeout(() => laser.remove(), 800);
+        alert('链接格式不正确，请输入完整的URL');
+      }
+    }
+
+    function showScanAnimation() {
+      const preview = document.getElementById('image-preview');
+      const scanLine = document.createElement('div');
+      scanLine.className = 'scan-line';
+      preview.appendChild(scanLine);
+      setTimeout(() => scanLine.remove(), 1500);
+    }
+
+    function showImagePreview(imgSrc) {
+      const preview = document.getElementById('image-preview');
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.alt = '商品图片';
+      img.onerror = () => {
+        preview.innerHTML = '<div class="placeholder">❌ 图片加载失败</div>';
+      };
+      preview.innerHTML = '';
+      preview.appendChild(img);
+      parsedImageData = imgSrc;
+    }
+
+    function resetImagePreview() {
+      parsedImageData = null;
+      const preview = document.getElementById('image-preview');
+      preview.innerHTML = `
+        <div class="placeholder">
+          <span class="icon">📸</span>
+          <div>拖拽商品图片到这里</div>
+          <div class="hint">支持从淘宝、拼多多直接拖入</div>
+        </div>
+      `;
+    }
+
+    // Drag and drop support
+    function initDragDrop() {
+      const preview = document.getElementById('image-preview');
+
+      preview.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        preview.classList.add('drag-over');
+      });
+
+      preview.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        preview.classList.remove('drag-over');
+      });
+
+      preview.addEventListener('drop', (e) => {
+        e.preventDefault();
+        preview.classList.remove('drag-over');
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const file = files[0];
+          if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              showImagePreview(event.target.result);
+              playScanSound();
+              showScanAnimation();
+            };
+            reader.readAsDataURL(file);
+          } else {
+            alert('请拖拽图片文件');
+          }
+        }
+      });
+    }
+
+    // ===== Reason Generation =====
+    const reasonMap = {
+      '奶茶': [
+        '今天风太大，需要一杯奶茶压压惊，不然容易被吹跑',
+        '我的血液里流淌的是奶茶，这不是购物，这是续命',
+        '奶茶店老板说今天不做奶茶就会倒闭，我不能见死不救'
+      ],
+      '游戏': [
+        '这不是游戏，这是在进行高强度的手指关节康复训练',
+        '我在研究一款关于人类决策心理学的互动式数字产品',
+        '这不是玩游戏，这是在维护我的社交关系网，队友需要我'
+      ],
+      '衣服': [
+        '衣柜说它最近很空虚，需要新衣服来填补它内心的创伤',
+        '我这不是买衣服，这是在做形象投资，回报率高达200%',
+        '去年的衣服配不上今年的我了，这是成长的代价'
+      ],
+      '零食': [
+        '我的胃刚刚给我发了律师函，要求立即补充碳水和脂肪',
+        '这不是零食，这是情绪稳定剂，不买我会暴躁',
+        '我在进行一场味蕾的环球旅行，从薯片开始'
+      ],
+      '盲盒': [
+        '我买的是盲盒吗？不，我买的是当代年轻人的精神寄托！',
+        '这不是盲盒，这是低成本的心理治疗，比看医生便宜多了',
+        '我在投资一个可能改变我一天心情的概率事件'
+      ],
+      '书': [
+        '这不是买书，这是在投资我的大脑，回报率无法估量',
+        '我的书架说它寂寞了，需要新书来陪它',
+        '知识就是力量，我这是在囤积力量'
+      ],
+      '手机': [
+        '我的手机电池已经老化到需要随身携带充电宝了，这是解放',
+        '这不是换手机，这是生产力升级，效率提升300%',
+        '旧手机经常死机，我这是在挽救我的时间和生命'
+      ],
+      '化妆品': [
+        '这不是化妆品，这是社交战场的盔甲',
+        '我在进行面部基础设施的维护和升级',
+        '这不是消费，这是对自己脸的投资，ROI超高'
+      ],
+      '鞋': [
+        '我的脚说它想住新房子了，我不能忽视它的需求',
+        '这不是买鞋，这是在收集行走的艺术品',
+        '旧鞋已经磨平了，我这是在保护我的膝盖'
+      ],
+      '包': [
+        '这不是包，这是移动的家，装着我所有的安全感',
+        '我的东西需要一个更精致的住所',
+        '这是功能性投资，能提升我每天的出行效率'
+      ],
+      'default': [
+        '经过严密的数学计算，不买这个将会导致我今日多巴胺分泌严重不足',
+        '这不是消费，这是对生活品质的合理追求',
+        '我掐指一算，今天宜购物，忌犹豫',
+        '这个商品正在召唤我，我感受到了宇宙的意志',
+        '我不是在花钱，我是在给快乐充值',
+        '这是限时的心动，错过就要等下一个轮回',
+        '我的钱包说它想减肥，帮它减减负',
+        '这不是冲动消费，这是深思熟虑后的即时决策',
+        '我在支持实体经济，这是社会责任',
+        '生活已经够苦了，这点甜头都不给吗？'
+      ]
+    };
+
+    function generateReason() {
+      const productName = document.getElementById('product-name').value.trim();
+      const key = Object.keys(reasonMap).find(k => productName.includes(k)) || 'default';
+      const reasons = reasonMap[key];
+      const reason = reasons[Math.floor(Math.random() * reasons.length)];
+      document.getElementById('reason').value = reason;
+    }
+
+    // ===== Comment Generation =====
+    const approveComments = [
+      '朕准了！退下吧，记得给我带点好吃的回来。',
+      '财务已盖章！这笔钱花得很有艺术感，批准！',
+      '看在你长得好看的份上，这笔预算我批了。',
+      '同意！毕竟你开心了，我才能跟着蹭吃蹭喝。',
+      '准奏！爱卿辛苦了，这点赏赐不算什么。',
+      '批准！记住，这是本月最后一次仁慈了（大概）。',
+      '通过！你的理由说服了我，虽然我也不知道为什么。',
+      '同意！钱是身外之物，快乐才是永恒的。',
+      '准了！但下次记得请我喝奶茶作为回报。',
+      '批准！你的消费欲望让我感动，去吧。',
+      '同意！人生苦短，及时行乐，我支持你。',
+      '准奏！这笔开支合理，下次继续。',
+      '通过！你的理由很有创意，值得鼓励。',
+      '批准！但你要承诺，买了之后要开心至少三天。'
+    ];
+
+    const rejectComments = [
+      '驳回！买这个不如请我吃顿火锅，我考虑一下再批。',
+      '预算不足！你的钱包刚刚给我发了求救信号。',
+      '拒绝！你的购物车已经满了，再买就要溢出来了！',
+      '驳回！我觉得你只是想要，但你并不是真的需要。',
+      '不准！你的理由太牵强了，连我自己都编不出这么烂的借口。',
+      '驳回！建议你把这个钱存起来，等冷静期过了再申请。',
+      '拒绝！你的消费记录让我担忧，需要冷静一下。',
+      '不准！这个月你已经申请了三次了，适可而止。',
+      '驳回！你的理由不够充分，请补充至少三个更扯淡的理由再试。',
+      '拒绝！我觉得你需要的是运动，不是购物。',
+      '不准！你的钱包在哭泣，你听不到吗？',
+      '驳回！建议你把这个商品加入购物车，等三天后再说。',
+      '拒绝！你的消费欲望像无底洞，我填不满了。',
+      '不准！这个商品看起来不错，但你的余额看起来更不错（才怪）。'
+    ];
+
+    function fillComment(recordId, friend, type) {
+      const arr = type === 'approve' ? approveComments : rejectComments;
+      const comment = arr[Math.floor(Math.random() * arr.length)];
+      const textarea = document.getElementById(`comment-${friend}`);
+      if (textarea) {
+        textarea.value = comment;
+      }
+    }
+
+    // ===== Court Logic =====
+    function judgeResult(approvals, rejections) {
+      // 2人都同意
+      if (approvals.length >= 2) return { status: 'approved', reason: '全票通过！恭喜获得合法剁手权！' };
+
+      // 2人都驳回
+      if (rejections.length >= 2) return { status: 'rejected', reason: '全票驳回！你的钱包保住了！' };
+
+      // 1同意 1驳回 -> 触发小法庭！
+      if (approvals.length === 1 && rejections.length === 1) {
+        const isApproved = Math.random() > 0.5; // 50% 概率
+        const courtReasons = isApproved
+          ? ['小法庭判定：虽然有点贵，但看着可怜，准了！', '法官敲下法槌：今天天气不错，适合花钱，通过！']
+          : ['小法庭判定：驳回！买这个不如把钱存起来买排骨。', '法官表示：你的理由太牵强了，驳回！'];
+
+        return {
+          status: isApproved ? 'approved' : 'rejected',
+          reason: courtReasons[Math.floor(Math.random() * courtReasons.length)],
+          isCourt: true // 标记这是小法庭的结果
+        };
+      }
+
+      return { status: 'pending', reason: '等待另一位法官到场...' };
+    }
+
+    function showCourt(result, recordId) {
+      const overlay = document.createElement('div');
+      overlay.className = 'court-overlay';
+      overlay.innerHTML = `
+        <div class="court-card">
+          <div class="gavel">⚖️</div>
+          <h2 class="text-2xl font-bold mt-4 mb-2">小法庭开庭！</h2>
+          <p class="text-lg mb-4">1票同意 vs 1票驳回</p>
+          <div class="court-reason">
+            <p class="font-bold">${result.reason}</p>
+          </div>
+          <button class="submit-btn mt-6" onclick="closeCourt(${recordId})">确认</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      // Play gavel sound
+      playStampSound();
+    }
+
+    function closeCourt(recordId) {
+      const overlay = document.querySelector('.court-overlay');
+      if (overlay) overlay.remove();
+      showReceiptDetail(recordId);
+      renderHistory();
+    }
+
+    // ===== Tab Switching =====
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (tab === 'form') {
+        document.getElementById('form-tab').classList.remove('hidden');
+        document.getElementById('history-tab').classList.add('hidden');
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      } else {
+        document.getElementById('form-tab').classList.add('hidden');
+        document.getElementById('history-tab').classList.remove('hidden');
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        renderHistory();
+      }
+    }
+
+    // ===== Form Submission =====
+    async function submitForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('product-name').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const reason = document.getElementById('reason').value.trim();
+
+      if (!name || !amount || !reason) return;
+
+      const requiredApprovals = amount > 50 ? 2 : 1;
+      const record = {
+        id: Date.now(),
+        no: getNextNo(),
+        name,
+        amount,
+        reason,
+        required_approvals: requiredApprovals,
+        approvals: {
+          A: { status: 'pending', label: '朋友A' },
+          B: requiredApprovals === 2 ? { status: 'pending', label: '朋友B' } : { status: 'ignored', label: '朋友B（无需审批）' }
+        },
+        created_at: new Date().toISOString(),
+        createdAt: new Date().toLocaleString('zh-CN')
+      };
+
+      // 保存到本地
+      const records = getRecords();
+      records.unshift(record);
+      saveRecords(records);
+
+      // 上传到云端（不传 id 和 createdAt 字段，让 Supabase 自动生成）
+      const cloudRecord = { ...record };
+      delete cloudRecord.id;
+      delete cloudRecord.createdAt;
+      const cloudId = await uploadRecord(cloudRecord);
+      if (cloudId) {
+        record.cloudId = cloudId;
+        saveRecords(records); // 保存 cloudId
+      }
+
+      document.getElementById('approval-form').reset();
+      resetImagePreview();
+      document.getElementById('receipt-no').textContent = getNextNo();
+
+      // Play printer sound and show ticket-printing animation
+      playPrinterSound();
+      switchTab('history');
+
+      // Apply ticket-printing animation to the newly created history item
+      setTimeout(() => {
+        const firstItem = document.querySelector('#history-list .receipt');
+        if (firstItem) {
+          firstItem.classList.add('ticket-printing');
+          firstItem.addEventListener('animationend', () => {
+            firstItem.classList.remove('ticket-printing');
+          }, { once: true });
+        }
+      }, 50);
+
+      // Auto-open the receipt detail after printing animation (without scrolling)
+      setTimeout(() => {
+        showReceiptDetail(record.id);
+        // 阻止页面滚动，保持在顶部
+        window.scrollTo(0, 0);
+      }, 1600);
+    }
+
+    // ===== History Rendering =====
+    function renderHistory() {
+      const records = getRecords();
+      const container = document.getElementById('history-list');
+
+      if (records.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500">暂无审批记录</p>';
+        return;
+      }
+
+      container.innerHTML = records.map(r => {
+        const status = getOverallStatus(r);
+        const statusClass = status === 'approved' ? 'status-approved' : status === 'rejected' ? 'status-rejected' : 'status-pending';
+        const statusText = status === 'approved' ? '✅ 已通过' : status === 'rejected' ? '❌ 已驳回' : '⏳ 审批中';
+        return `
+          <div class="receipt history-item" onclick="showReceiptDetail(${r.id})">
+            <div class="receipt-border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-xl font-bold">${escapeHtml(r.name)}</p>
+                  <p class="text-lg">💰 ¥${r.amount.toFixed(2)}</p>
+                  <p class="text-sm text-gray-500">No. ${r.no} | ${r.createdAt}</p>
+                </div>
+                <span class="status-badge ${statusClass}">${statusText}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getOverallStatus(record) {
+      const a = record.approvals.A;
+      const b = record.approvals.B;
+      if (a.status === 'rejected' || b.status === 'rejected') return 'rejected';
+      if (a.status === 'approved' && (b.status === 'approved' || b.status === 'ignored')) return 'approved';
+      return 'pending';
+    }
+
+    // ===== Receipt Detail Modal =====
+    function showReceiptDetail(id) {
+      const records = getRecords();
+      const record = records.find(r => r.id === id);
+      if (!record) return;
+
+      const modal = document.getElementById('receipt-modal');
+      const detail = document.getElementById('receipt-detail');
+      const status = getOverallStatus(record);
+
+      const aStatus = record.approvals.A.status;
+      const bStatus = record.approvals.B.status;
+
+      detail.innerHTML = `
+        <div class="receipt-border">
+          <div class="text-center mb-4">
+            <p class="text-2xl font-bold">═══ 审批小票 ═══</p>
+            <p class="text-sm text-gray-500">No. ${record.no}</p>
+            <p class="text-sm text-gray-500">${record.createdAt}</p>
+          </div>
+
+          <div class="mb-4 space-y-2">
+            <p class="text-lg"><span class="font-bold">📦 商品：</span>${escapeHtml(record.name)}</p>
+            <p class="text-lg"><span class="font-bold">💰 金额：</span>¥${record.amount.toFixed(2)}</p>
+            <p class="text-lg"><span class="font-bold">📝 理由：</span>${escapeHtml(record.reason)}</p>
+            <p class="text-lg"><span class="font-bold">👥 需要审批：</span>${record.requiredApprovals} 位朋友</p>
+          </div>
+
+          <div class="border-t-2 border-dashed border-gray-300 my-4 pt-4">
+            <p class="text-center text-lg font-bold mb-3">─── 审批区 ───</p>
+
+            <!-- Friend A -->
+            <div class="mb-4 relative" id="approval-a">
+              <p class="text-lg font-bold mb-2">👤 朋友A</p>
+              ${aStatus === 'pending' ? `
+                <div class="mb-2">
+                  <div class="flex gap-1 mb-1 items-center">
+                    <span class="text-sm text-gray-500">审批意见（可选）：</span>
+                    <button type="button" class="fill-comment-btn" onclick="fillComment(${record.id}, 'A', 'approve')">🎲 随机批准语</button>
+                    <button type="button" class="fill-comment-btn" style="background:#ef4444" onclick="fillComment(${record.id}, 'A', 'reject')">🎲 随机驳回语</button>
+                  </div>
+                  <textarea id="comment-A" class="comment-textarea" rows="2" placeholder="写点什么审批意见吧..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn-approve flex-1 py-2 text-lg" onclick="submitApproval(${record.id}, 'A', 'approved')">✅ 批准</button>
+                  <button class="btn-reject flex-1 py-2 text-lg" onclick="submitApproval(${record.id}, 'A', 'rejected')">❌ 驳回</button>
+                </div>
+              ` : `
+                <div class="text-center py-2 relative">
+                  <span class="status-badge ${aStatus === 'approved' ? 'status-approved' : 'status-rejected'} text-lg">
+                    ${aStatus === 'approved' ? '✅ 已批准' : '❌ 已驳回'}
+                  </span>
+                  <div class="stamp ${aStatus === 'approved' ? 'approved' : 'rejected'}" style="top: -10px; right: 20px;">
+                    ${aStatus === 'approved' ? '准' : '驳'}
+                  </div>
+                  ${record.approvals.A.comment ? `<p class="text-sm text-gray-600 mt-2 italic">"${escapeHtml(record.approvals.A.comment)}"</p>` : ''}
+                </div>
+              `}
+            </div>
+
+            <!-- Friend B -->
+            <div class="mb-4 relative" id="approval-b">
+              <p class="text-lg font-bold mb-2">👤 朋友B ${record.requiredApprovals === 1 ? '<span class="text-sm text-gray-400">(无需审批)</span>' : ''}</p>
+              ${record.requiredApprovals === 1 ? `
+                <p class="text-gray-400 text-center py-2">— 金额 ≤ 50元，无需第二位审批 —</p>
+              ` : bStatus === 'pending' ? `
+                <div class="mb-2">
+                  <div class="flex gap-1 mb-1 items-center">
+                    <span class="text-sm text-gray-500">审批意见（可选）：</span>
+                    <button type="button" class="fill-comment-btn" onclick="fillComment(${record.id}, 'B', 'approve')">🎲 随机批准语</button>
+                    <button type="button" class="fill-comment-btn" style="background:#ef4444" onclick="fillComment(${record.id}, 'B', 'reject')">🎲 随机驳回语</button>
+                  </div>
+                  <textarea id="comment-B" class="comment-textarea" rows="2" placeholder="写点什么审批意见吧..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn-approve flex-1 py-2 text-lg" onclick="submitApproval(${record.id}, 'B', 'approved')">✅ 批准</button>
+                  <button class="btn-reject flex-1 py-2 text-lg" onclick="submitApproval(${record.id}, 'B', 'rejected')">❌ 驳回</button>
+                </div>
+              ` : `
+                <div class="text-center py-2 relative">
+                  <span class="status-badge ${bStatus === 'approved' ? 'status-approved' : 'status-rejected'} text-lg">
+                    ${bStatus === 'approved' ? '✅ 已批准' : '❌ 已驳回'}
+                  </span>
+                  <div class="stamp ${bStatus === 'approved' ? 'approved' : 'rejected'}" style="top: -10px; right: 20px;">
+                    ${bStatus === 'approved' ? '准' : '驳'}
+                  </div>
+                  ${record.approvals.B.comment ? `<p class="text-sm text-gray-600 mt-2 italic">"${escapeHtml(record.approvals.B.comment)}"</p>` : ''}
+                </div>
+              `}
+            </div>
+          </div>
+
+          <!-- Court Result (if triggered) -->
+          ${record.courtResult ? `
+            <div class="border-t-2 border-dashed border-gray-300 my-4 pt-4">
+              <p class="text-center text-lg font-bold mb-2">⚖️ 小法庭判决书</p>
+              <div class="court-reason">
+                <p>${escapeHtml(record.courtResult.reason)}</p>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Final Status -->
+          <div class="final-status ${status === 'approved' ? 'pass' : (status === 'rejected' ? 'wait' : 'wait')}" ${status === 'rejected' ? 'style="color:#dc2626"' : ''}>
+            ${status === 'approved' ? '✅ 审批通过，去买吧！' : status === 'rejected' ? '❌ 审批被驳回，省钱了！' : '⏳ 等待审批中'}
+          </div>
+
+          <!-- Share Button -->
+          ${record.cloudId ? `
+            <div class="text-center mt-4 pt-4 border-t-2 border-dashed border-gray-300">
+              <button class="share-btn" onclick="shareRecord('${record.cloudId}')">📤 分享给朋友审批</button>
+              <p class="text-xs text-gray-400 mt-2">生成链接后，朋友打开即可填写审批意见</p>
+            </div>
+          ` : `
+            <div class="text-center mt-4 pt-4 border-t-2 border-dashed border-gray-300">
+              <p class="text-xs text-gray-400">⚠️ 云端同步失败，无法分享</p>
+            </div>
+          `}
+
+          <!-- Delete Button -->
+          <div class="text-center mt-4">
+            <button class="text-red-500 text-sm underline" onclick="deleteRecord(${record.id})">🗑️ 删除此记录</button>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+
+      // Trigger stamp animations for already-approved/rejected items
+      setTimeout(() => {
+        detail.querySelectorAll('.stamp').forEach(s => {
+          s.style.animation = 'none';
+          void s.offsetWidth;
+          s.style.animation = '';
+        });
+      }, 50);
+    }
+
+    function closeModal() {
+      document.getElementById('receipt-modal').classList.add('hidden');
+      renderHistory();
+    }
+
+    // ===== Approval Action =====
+    function submitApproval(id, friend, action) {
+      const records = getRecords();
+      const record = records.find(r => r.id === id);
+      if (!record) return;
+
+      // Get comment from textarea
+      const commentTextarea = document.getElementById(`comment-${friend}`);
+      const comment = commentTextarea ? commentTextarea.value.trim() : '';
+
+      record.approvals[friend].status = action;
+      record.approvals[friend].comment = comment;
+      saveRecords(records);
+
+      // Play sound
+      if (action === 'approved') {
+        playStampSound();
+      } else {
+        playRejectSound();
+        playTearSound();
+      }
+
+      // Shake animation on the approval section
+      const section = document.getElementById(`approval-${friend.toLowerCase()}`);
+      if (section) {
+        section.classList.add('shake');
+        setTimeout(() => section.classList.remove('shake'), 500);
+      }
+
+      // Check if we need to trigger court or final status
+      const aStatus = record.approvals.A.status;
+      const bStatus = record.approvals.B.status;
+
+      // Count approvals and rejections
+      const approvals = [];
+      const rejections = [];
+      if (aStatus === 'approved') approvals.push('A');
+      if (aStatus === 'rejected') rejections.push('A');
+      if (bStatus === 'approved') approvals.push('B');
+      if (bStatus === 'rejected') rejections.push('B');
+
+      // If both have voted and it's 1:1, trigger court
+      if (approvals.length === 1 && rejections.length === 1 && !record.courtResult) {
+        const courtResult = judgeResult(approvals, rejections);
+        record.courtResult = courtResult;
+        saveRecords(records);
+
+        // Show court overlay
+        setTimeout(() => {
+          showCourt(courtResult, id);
+          if (courtResult.status === 'approved') {
+            setTimeout(() => {
+              playSuccessSound();
+              spawnConfetti();
+              spawnCanvasCoins(record.amount);
+            }, 300);
+          }
+        }, 300);
+      } else {
+        // Normal flow
+        const newStatus = getOverallStatus(record);
+        if (newStatus === 'approved') {
+          setTimeout(() => {
+            playSuccessSound();
+            spawnConfetti();
+            spawnCanvasCoins(record.amount);
+          }, 300);
+        }
+        showReceiptDetail(id);
+      }
+    }
+
+    // ===== Delete Record =====
+    function deleteRecord(id) {
+      if (!confirm('确定要删除这条审批记录吗？')) return;
+      const records = getRecords().filter(r => r.id !== id);
+      saveRecords(records);
+      closeModal();
+      renderHistory();
+    }
+
+    // ===== Utility =====
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ===== Share Function =====
+    function shareRecord(cloudId) {
+      if (!cloudId) {
+        alert('该记录未同步到云端，无法分享');
+        return;
+      }
+      const shareUrl = `${location.origin}${location.pathname}?id=${cloudId}`;
+      
+      // 创建分享弹窗
+      const overlay = document.createElement('div');
+      overlay.className = 'court-overlay';
+      overlay.innerHTML = `
+        <div class="court-card" style="max-width: 400px;">
+          <h2 class="text-2xl font-bold mb-4">📤 分享审批链接</h2>
+          <p class="text-sm text-gray-600 mb-2">复制以下链接发给朋友：</p>
+          <div class="share-link-box">${shareUrl}</div>
+          <div class="flex gap-2 mt-4">
+            <button class="submit-btn flex-1" onclick="copyShareLink('${shareUrl}')">📋 复制链接</button>
+            <button class="submit-btn flex-1" style="background:#6b7280" onclick="this.closest('.court-overlay').remove()">关闭</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    function copyShareLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert('链接已复制到剪贴板！');
+      }).catch(() => {
+        // 降级方案
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('链接已复制到剪贴板！');
+      });
+    }
+
+    // ===== Settings Button =====
+    function showSettings() {
+      const config = getSupabaseConfig();
+      const overlay = document.createElement('div');
+      overlay.className = 'court-overlay';
+      overlay.innerHTML = `
+        <div class="court-card" style="max-width: 450px;">
+          <h2 class="text-2xl font-bold mb-4">⚙️ 云端设置</h2>
+          <div class="mb-4">
+            <label class="block mb-1 text-lg">🔗 Supabase URL</label>
+            <input type="text" id="settings-url" class="form-input" value="${config?.url || ''}" />
+          </div>
+          <div class="mb-4">
+            <label class="block mb-1 text-lg">🔑 Supabase Anon Key</label>
+            <input type="text" id="settings-key" class="form-input" value="${config?.key || ''}" />
+          </div>
+          <div class="flex gap-2">
+            <button class="submit-btn flex-1" onclick="updateSettings()">💾 保存</button>
+            <button class="submit-btn flex-1" style="background:#ef4444" onclick="clearSettings()">🗑️ 清除配置</button>
+            <button class="submit-btn flex-1" style="background:#6b7280" onclick="this.closest('.court-overlay').remove()">取消</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    function updateSettings() {
+      const url = document.getElementById('settings-url').value.trim();
+      const key = document.getElementById('settings-key').value.trim();
+      if (!url || !key) {
+        alert('请填写完整的 URL 和 Key');
+        return;
+      }
+      saveSupabaseConfig(url, key);
+      if (initSupabase(url, key)) {
+        alert('配置已更新！');
+        location.reload();
+      } else {
+        alert('配置更新失败');
+      }
+    }
+
+    function clearSettings() {
+      if (confirm('确定要清除云端配置吗？清除后将无法使用分享功能。')) {
+        localStorage.removeItem('supabase_config');
+        location.reload();
+      }
+    }
+
+    // ===== Init =====
+    // 检查是否是分享链接
+    checkShareLink();
+    
+    // 如果不是分享链接且已配置，显示正常界面
+    if (sbClient && !new URLSearchParams(window.location.search).get('id')) {
+      document.getElementById('receipt-no').textContent = getNextNo();
+      initDragDrop();
+      
+      // 添加设置按钮到 header
+      const header = document.querySelector('#app > .text-center.mb-6');
+      if (header) {
+        const settingsBtn = document.createElement('button');
+        settingsBtn.innerHTML = '⚙️';
+        settingsBtn.style.cssText = 'position:fixed;top:1rem;right:1rem;font-size:1.5rem;background:none;border:none;cursor:pointer;z-index:100;';
+        settingsBtn.onclick = showSettings;
+        document.body.appendChild(settingsBtn);
+      }
+    } else if (!sbClient && !new URLSearchParams(window.location.search).get('id')) {
+      // 未配置且不是分享链接，显示配置面板
+      showConfigPanel();
+    }
+  </script>
 </body>
 </html>
